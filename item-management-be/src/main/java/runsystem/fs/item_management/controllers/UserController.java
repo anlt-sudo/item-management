@@ -1,5 +1,6 @@
 package runsystem.fs.item_management.controllers;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -44,5 +45,20 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // API lấy thông tin người dùng đang đăng nhập
+    @GetMapping("/users/me")
+    public ResponseEntity<?> getCurrentUser(Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+            String email = principal.getName();
+            java.util.Optional<User> userOpt = userService.getByEmail(email);
+            if (userOpt.isPresent()) {
+                return ResponseEntity.ok(userOpt.get());
+            } else {
+                return ResponseEntity.status(404).body("User not found");
+            }
     }
 }

@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-ItemManagementApplication<item-management>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "runsystem.fs.item_management.ItemManagementApplication",
+      "projectName": "item-management",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
