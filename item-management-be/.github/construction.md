@@ -1,0 +1,2 @@
+1. Quy tắc codeing của tôi
+- Đừng sử dụng import như sau trong code vd: runsystem.fs.item_management.entities.CartDetailPK cartDetailPK = new runsystem.fs.item_management.entities.CartDetailPK(cart.getId(), item.getProduct().getId());
