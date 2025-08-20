@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductByIdThunk } from "../features/productSlice";
-import Spinner from "../components/ui/Spinner";
+import { useParams } from "react-router-dom";
 import { addToCartThunk } from "../features/cartSlice";
-import ProductImages from "../components/ProductImages";
-import ProductInfo from "../components/ProductInfo";
+import { fetchProductByIdThunk } from "../features/productSlice";
+import ProductImages from "../components/product/ProductImages";
+import ProductInfo from "../components/product/ProductInfo";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
