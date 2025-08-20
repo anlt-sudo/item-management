@@ -25,7 +25,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order placeOrder(int userId) {
+    public Order placeOrder(int userId, String address) {
         // Lấy cart
         Cart cart = cartRepository.findByUser_Id(userId).orElse(null);
         if (cart == null) throw new RuntimeException("Cart not found");
@@ -51,6 +51,7 @@ public class OrderServiceImpl implements OrderService {
             total += cartItem.getProduct().getPrice() * cartItem.getQuantity();
         }
         order.setTotal(total);
+        order.setAddress(address);
         Order savedOrder = orderRepository.save(order);
         orderDetailRepository.saveAll(order.getOrderDetails());
 

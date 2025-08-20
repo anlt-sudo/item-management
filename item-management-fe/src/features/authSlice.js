@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { login, register } from "../api/authApi";
+import { setAuthToken } from "../api/axiosClient";
 import { getCurrentUser } from "../api/userApi";
 
 const initialState = {
@@ -28,7 +29,7 @@ export const registerThunk = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const response = await register(data);
-      return response.data;
+      return response;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response.data);
     }
@@ -40,7 +41,8 @@ export const fetchUserProfileThunk = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await getCurrentUser();
-      return response.data;
+
+      return response;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response.data);
     }
@@ -56,6 +58,7 @@ const authSlice = createSlice({
       state.token = null;
       state.isAuthenticated = false;
       state.role = null;
+      setAuthToken(null);
     },
   },
   extraReducers: (builder) => {
@@ -68,6 +71,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.token = action.payload.token;
         state.isAuthenticated = true;
+        setAuthToken(action.payload.token);
       })
       .addCase(loginThunk.rejected, (state, action) => {
         state.loading = false;
@@ -81,6 +85,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.token = action.payload.token;
         state.isAuthenticated = true;
+        setAuthToken(action.payload.token);
       })
       .addCase(registerThunk.rejected, (state, action) => {
         state.loading = false;
@@ -92,8 +97,8 @@ const authSlice = createSlice({
       })
       .addCase(fetchUserProfileThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user;
-        state.role = action.payload.user.role;
+        state.user = action.payload;
+        state.role = action.payload.role;
         state.isAuthenticated = true;
       })
       .addCase(fetchUserProfileThunk.rejected, (state, action) => {

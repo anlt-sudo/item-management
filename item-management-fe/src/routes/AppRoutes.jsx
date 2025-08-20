@@ -10,6 +10,7 @@ import ProductManagement from "../pages/admin/ProductManagement";
 import OrderManagement from "../pages/admin/OrderManagement";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminRoute from "./AdminRoute";
+import OrderPage from "../pages/OrderPage";
 
 const AppRoutes = () => (
   <Routes>
@@ -23,6 +24,11 @@ const AppRoutes = () => (
         </ProtectedRoute>
       }
     />
+    <Route path="/checkout" element={
+      <ProtectedRoute>
+        <OrderPage/>
+      </ProtectedRoute>
+    } />
     <Route path="/login" element={<LoginPage />} />
     <Route path="/register" element={<RegisterPage />} />
     <Route

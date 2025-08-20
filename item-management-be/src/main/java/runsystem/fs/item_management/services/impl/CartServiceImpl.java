@@ -12,6 +12,7 @@ import runsystem.fs.item_management.repositories.CartRepository;
 import runsystem.fs.item_management.repositories.CartDetailRepository;
 import runsystem.fs.item_management.services.CartService;
 import runsystem.fs.item_management.dtos.CartAddItemResponseDto;
+import runsystem.fs.item_management.dtos.CartItemUpdationRequest;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -51,10 +52,10 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart updateItemInCart(int userId, CartItem item) {
+    public Cart updateItemInCart(int userId, CartItemUpdationRequest item) {
         Cart cart = cartRepository.findByUser_Id(userId).orElse(null);
         if (cart == null) return null;
-        CartDetailPK pk = new CartDetailPK(cart.getId(), item.getProduct().getId());
+        CartDetailPK pk = new CartDetailPK(item.getCartId(), item.getProductId());
         java.util.Optional<CartItem> existing = cartDetailRepository.findById(pk);
         if (existing.isPresent()) {
             CartItem existItem = existing.get();

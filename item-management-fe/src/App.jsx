@@ -12,7 +12,7 @@ function App() {
       <BrowserRouter>
         <div className="flex flex-col min-h-screen bg-gray-50">
           <Header />
-          <main className="flex-1">
+          <main className="flex-1 mt-4">
             <AppRoutes />
           </main>
           <Footer />

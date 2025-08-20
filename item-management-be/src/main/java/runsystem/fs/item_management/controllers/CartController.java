@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import runsystem.fs.item_management.dtos.CartAddItemResponseDto;
 import runsystem.fs.item_management.dtos.CartItemAddDto;
+import runsystem.fs.item_management.dtos.CartItemUpdationRequest;
 import runsystem.fs.item_management.entities.Cart;
 import runsystem.fs.item_management.entities.CartItem;
 import runsystem.fs.item_management.entities.User;
@@ -56,7 +58,7 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public runsystem.fs.item_management.dtos.CartAddItemResponseDto addItem(@RequestBody CartItemAddDto dto, Authentication authentication) {
+    public CartAddItemResponseDto addItem(@RequestBody CartItemAddDto dto, Authentication authentication) {
         User user = getUser(authentication);
         if (user == null) {
             throw new RuntimeException("User not found");
@@ -69,7 +71,7 @@ public class CartController {
     }
 
     @PutMapping("/update")
-    public Cart updateItem(@RequestBody CartItem item, Authentication authentication) {
+    public Cart updateItem(@RequestBody CartItemUpdationRequest item, Authentication authentication) {
         User user = getUser(authentication);
         if (user == null) {
             throw new RuntimeException("User not found");

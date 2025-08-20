@@ -1,5 +1,5 @@
 const HeroBanner = () => (
-  <section className="w-full bg-gradient-to-r from-gray-100 to-white py-10 md:py-20 flex flex-col items-center justify-center text-center relative overflow-hidden">
+  <section className="w-full bg-gradient-to-r py-10 md:py-20 flex flex-col items-center justify-center text-center relative overflow-hidden">
     <img
       src="https://i.pinimg.com/736x/fa/45/96/fa4596ad9a9d39901eeb455ed4f74e44.jpg"
       alt="Nike Banner"

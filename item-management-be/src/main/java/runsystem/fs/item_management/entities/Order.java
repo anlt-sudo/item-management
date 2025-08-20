@@ -29,4 +29,6 @@ public class Order {
 
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<OrderDetail> orderDetails;
+
+	private String address;
 }
