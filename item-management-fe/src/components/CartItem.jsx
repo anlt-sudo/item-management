@@ -89,9 +89,7 @@ const CartItem = ({ item }) => {
               <button
                 className="py-2 px-3 rounded hover:bg-gray-100 text-black"
                 title="Xóa khỏi giỏ hàng"
-                onClick={() =>
-                  dispatch(removeFromCartThunk({ cartId, productId }))
-                }
+                onClick={() => dispatch(removeFromCartThunk(productId))}
               >
                 <svg
                   width="28"

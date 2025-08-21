@@ -15,3 +15,8 @@ export const updateProduct = (id, data) =>
     },
   });
 export const deleteProduct = (id) => axiosClient.delete(`/api/products/${id}`);
+export const searchProducts = (productName) => {
+  return axiosClient.get(`/api/products/search`, {
+    params: { productName },
+  });
+};

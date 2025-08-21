@@ -31,7 +31,21 @@ function isPublicEndpoint(url, method) {
 axiosClient.interceptors.request.use(
   (config) => {
     if (!isPublicEndpoint(config.url, config.method) && authToken) {
-      config.headers.Authorization = `Bearer ${authToken}`;
+      try {
+        const persistRoot = localStorage.getItem("persist:root");
+        if (persistRoot) {
+          const { auth } = JSON.parse(persistRoot);
+          if (auth) {
+            const { token } = JSON.parse(auth);
+            if (token) {
+              config.headers.Authorization = `Bearer ${token}`;
+            }
+          }
+        }
+      } catch (err) {
+        // Nếu lỗi parse localStorage, không làm gì cả
+        console.error("Error parsing localStorage:", err);
+      }
     } else {
       // Nếu là public endpoint thì đảm bảo không có Authorization
       delete config.headers.Authorization;

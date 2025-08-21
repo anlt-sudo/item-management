@@ -1,8 +1,7 @@
-import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { placeOrder } from "../api/orderApi";
-import { placeOrderThunk } from "../features/orderSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { placeOrderThunk } from "../features/orderSlice";
 
 const OrderPage = () => {
   const user = useSelector((state) => state.auth.user) || {};
@@ -15,9 +14,11 @@ const OrderPage = () => {
   const [orderSuccess, setOrderSuccess] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
   const handleOrder = (e) => {
     e.preventDefault();
+    setIsPlacingOrder(true);
     const data = { address };
 
     dispatch(placeOrderThunk(data))
@@ -26,6 +27,7 @@ const OrderPage = () => {
         setOrderSuccess(true);
         setTimeout(() => {
           setOrderSuccess(false);
+          setIsPlacingOrder(false);
           navigate("/");
         }, 2500);
       })
@@ -33,6 +35,7 @@ const OrderPage = () => {
         console.error("Order placement failed:", error);
         alert("Failed to place order. Please try again.");
         setOrderSuccess(false);
+        setIsPlacingOrder(false);
       });
   };
 
@@ -60,10 +63,35 @@ const OrderPage = () => {
           />
           <button
             type="submit"
-            className="w-full py-3 rounded bg-black text-white font-semibold text-lg hover:bg-gray-900 transition"
-            disabled={items.length === 0}
+            className="w-full py-3 rounded bg-black text-white font-semibold text-lg hover:bg-gray-900 transition flex items-center justify-center"
+            disabled={items.length === 0 || isPlacingOrder}
           >
-            Place Order
+            {isPlacingOrder ? (
+              <span className="flex items-center gap-2">
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  />
+                </svg>
+                Placing Order...
+              </span>
+            ) : (
+              "Place Order"
+            )}
           </button>
         </form>
         {orderSuccess && (

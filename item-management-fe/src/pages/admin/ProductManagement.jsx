@@ -63,7 +63,16 @@ const ProductManagement = () => {
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">Product Management</h2>
-      <Button onClick={() => setModalOpen(true)} className="mb-4">
+      <Button
+        onClick={() => setModalOpen(true)}
+        className="mb-4"
+        style={{
+          backgroundColor: "#000",
+          color: "#fff",
+          padding: "0.5rem 1rem",
+          borderRadius: "0.25rem",
+        }}
+      >
         Create Product
       </Button>
       <ProductTable

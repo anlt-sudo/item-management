@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import HeroBanner from "../components/HeroBanner";
 import CategorySection from "../components/CategorySection";
 import { fetchUserProfileThunk } from "../features/authSlice";
+import BannerShoe from "../components/BannerShoe";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,6 @@ const HomePage = () => {
   const [current, setCurrent] = useState(0);
   const total = products.length;
 
-  // Tự động trượt slide
   useEffect(() => {
     if (total < 2) return;
     const interval = setInterval(() => {
@@ -37,11 +37,17 @@ const HomePage = () => {
   const handleNext = () => setCurrent((prev) => (prev + 1) % total);
 
   if (loading) return <Spinner />;
-  if (error) return <div className="text-red-500">{error}</div>;
+  if (error)
+    return (
+      <div className="text-red-500">
+        {typeof error === "string" ? error : error?.error || "Có lỗi xảy ra"}
+      </div>
+    );
 
   return (
     <>
       <HeroBanner />
+      {/* <BannerShoe /> */}
       <CategorySection />
       <div className="px-4 pt-4">
         <h2 className="text-2xl md:text-3xl font-bold mb-4 text-gray-900">
@@ -73,6 +79,7 @@ const HomePage = () => {
               {products.length > 1 && (
                 <ProductCard
                   product={products[(current - 1 + total) % total]}
+                  size="large"
                 />
               )}
             </div>
@@ -88,7 +95,7 @@ const HomePage = () => {
                   className="w-full max-w-3xl mx-auto"
                 >
                   {products[current] && (
-                    <ProductCard product={products[current]} />
+                    <ProductCard product={products[current]} size="large" />
                   )}
                 </motion.div>
               </AnimatePresence>
@@ -96,7 +103,10 @@ const HomePage = () => {
             {/* Sản phẩm bên phải */}
             <div className="hidden md:flex flex-col items-center justify-center w-[220px] opacity-40 scale-90 blur-sm pointer-events-none select-none transition-all duration-300">
               {products.length > 1 && (
-                <ProductCard product={products[(current + 1) % total]} />
+                <ProductCard
+                  product={products[(current + 1) % total]}
+                  size="large"
+                />
               )}
             </div>
           </div>

@@ -74,4 +74,10 @@ public class ProductController {
         productService.deleteProduct(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/search")
+    public List<Product> searchProducts(@RequestParam String productName) {
+        // Implement search logic here, e.g., using a repository method
+        return productService.searchProducts(productName);
+    }
 }

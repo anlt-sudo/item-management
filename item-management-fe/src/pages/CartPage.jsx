@@ -40,7 +40,10 @@ const CartPage = () => {
           ) : (
             <ul className="divide-y divide-gray-200">
               {items.map((item) => (
-                <CartItem key={item.id} item={item} />
+                <CartItem
+                  key={item.id.cartId + "-" + item.id.productId}
+                  item={item}
+                />
               ))}
             </ul>
           )}

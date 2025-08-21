@@ -68,7 +68,17 @@ const ProductForm = ({
           />
         )}
       </div>
-      <Button type="submit">{editProduct ? "Update" : "Create"}</Button>
+      <Button
+        type="submit"
+        style={{
+          backgroundColor: "#000",
+          color: "#fff",
+          padding: "0.5rem 1rem",
+          borderRadius: "0.25rem",
+        }}
+      >
+        {editProduct ? "Update" : "Create"}
+      </Button>
       <Button
         type="button"
         variant="secondary"

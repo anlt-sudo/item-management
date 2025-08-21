@@ -40,7 +40,13 @@ const LoginPage = () => {
         error={errors.password?.message}
         type="password"
       />
-      {error && <div className="text-red-500 mb-2">{error}</div>}
+      {error && (
+        <div className="text-red-500 mb-2">
+          {typeof error === "string"
+            ? error
+            : error?.error || "An error occurred"}
+        </div>
+      )}
       <Button type="submit" loading={loading}>
         Login
       </Button>

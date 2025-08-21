@@ -2,14 +2,24 @@ import { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../features/authSlice";
 import { Link } from "react-router-dom";
+import { fetchCartThunk } from "../../features/cartSlice";
+import SearchDropdown from "../SearchDropdown";
 
 const Header = () => {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
-  const cartCount = useSelector((state) => state.cart.items.length);
+  // Tổng số lượng sản phẩm trong cart
+  const cartCount = useSelector((state) =>
+    state.cart.items.reduce((sum, item) => sum + (item.quantity || 0), 0)
+  );
   const dispatch = useDispatch();
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const menuRef = useRef(null);
+
+  useEffect(() => {
+    dispatch(fetchCartThunk());
+  }, [dispatch]);
 
   // Đóng menu khi click ra ngoài
   useEffect(() => {
@@ -40,41 +50,39 @@ const Header = () => {
             Home
           </Link>
           <Link to="/products" className="hover:text-black transition">
-            Men
-          </Link>
-          <Link to="/products" className="hover:text-black transition">
-            Women
-          </Link>
-          <Link to="/products" className="hover:text-black transition">
-            Kids
-          </Link>
-          <Link to="/products" className="hover:text-black transition">
-            Sale
+            Products
           </Link>
         </nav>
 
         {/* Right icons */}
         <div className="flex-1 flex justify-end items-center gap-6">
           {/* Search icon */}
-          <button
-            className="p-2 hover:bg-gray-100 rounded-full"
-            aria-label="Search"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-6 h-6"
+          <div className="relative">
+            <button
+              className="p-2 hover:bg-gray-100 rounded-full"
+              aria-label="Search"
+              onClick={() => setSearchOpen((v) => !v)}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z"
-              />
-            </svg>
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z"
+                />
+              </svg>
+            </button>
+            <SearchDropdown
+              open={searchOpen}
+              onClose={() => setSearchOpen(false)}
+            />
+          </div>
           {/* User icon or dropdown - chỉ hiển thị khi login */}
           {isAuthenticated ? (
             <div className="relative" ref={menuRef}>
@@ -102,7 +110,7 @@ const Header = () => {
                 </span>
               </button>
               {menuOpen && (
-                <div className="absolute right-0 mt-2 bg-white border rounded shadow-lg min-w-[160px] z-50">
+                <div className="absolute right-0 mt-2 bg-white border rounded shadow-lg min-w-[200px] z-50">
                   <Link
                     to="/profile"
                     className="block px-4 py-2 hover:bg-gray-100"
@@ -124,7 +132,14 @@ const Header = () => {
                         className="block px-4 py-2 hover:bg-gray-100"
                         onClick={() => setMenuOpen(false)}
                       >
-                        Quản lý sản phẩm
+                        Product Management
+                      </Link>
+                      <Link
+                        to="/admin/orders"
+                        className="block px-4 py-2 hover:bg-gray-100"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        Order Management
                       </Link>
                     </>
                   )}

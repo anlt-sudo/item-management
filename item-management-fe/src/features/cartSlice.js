@@ -51,10 +51,10 @@ export const updateCartItemThunk = createAsyncThunk(
 
 export const removeFromCartThunk = createAsyncThunk(
   "cart/removeFromCart",
-  async (id, thunkAPI) => {
+  async (productId, thunkAPI) => {
     try {
-      const data = await removeFromCartApi(id);
-      return { id };
+      await removeFromCartApi(productId);
+      return { productId };
     } catch (err) {
       return thunkAPI.rejectWithValue(
         err.response?.data || "Remove from cart failed"
@@ -100,14 +100,36 @@ const cartSlice = createSlice({
         state.items = action.payload || [];
         state.status = "succeeded";
       })
-      .addCase(addToCartThunk.fulfilled, (state) => {
-        // Server trả về cart mới
+      .addCase(addToCartThunk.fulfilled, (state, action) => {
+        const { addedItem } = action.payload || {};
+        if (!addedItem) {
+          state.status = "succeeded";
+          return;
+        }
+        const idx = state.items.findIndex(
+          (i) =>
+            i.id?.cartId === addedItem.id.cartId &&
+            i.id?.productId === addedItem.id.productId
+        );
+        if (idx !== -1) {
+          // Đã có sản phẩm, cập nhật quantity
+          state.items[idx].quantity = addedItem.quantity;
+        } else {
+          // Thêm mới sản phẩm vào cart
+          state.items.push(addedItem);
+        }
         state.status = "succeeded";
       })
       .addCase(updateCartItemThunk.fulfilled, (state) => {
         state.status = "succeeded";
       })
-      .addCase(removeFromCartThunk.fulfilled, (state) => {
+      .addCase(removeFromCartThunk.fulfilled, (state, action) => {
+        const { productId } = action.payload || {};
+        if (productId) {
+          state.items = state.items.filter(
+            (item) => item.id?.productId !== productId
+          );
+        }
         state.status = "succeeded";
       })
       .addCase(clearCartThunk.fulfilled, (state) => {
